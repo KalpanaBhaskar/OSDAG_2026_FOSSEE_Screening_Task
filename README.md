@@ -2,7 +2,7 @@
 
 This project creates interactive 2D and 3D visualizations of Shear Force Diagrams (SFD) and Bending Moment Diagrams (BMD) for a bridge grillage model using Python, Plotly, and Xarray.
 
-##  Project Overview
+## 📋 Project Overview
 
 The project consists of two main tasks:
 
@@ -11,7 +11,7 @@ The project consists of two main tasks:
 
 **Sign Convention**: Both scripts follow the raw Xarray dataset values (Mz, Vy) as per grading criteria to avoid manual flipping errors. All values are used directly without sign manipulation.
 
-##  Key Technical Features
+## 🎯 Key Technical Features
 
 ### Unified Coordinate Mapping (Task 1)
 - Uses **actual bridge coordinates** from 0 to 25 meters
@@ -63,7 +63,7 @@ pip install -r requirements.txt
 - `numpy>=1.20.0` - For numerical operations
 - `netCDF4>=1.5.0` - **Critical**: Required as the engine for xarray to parse `.nc` files
 
-##  Usage
+## 🚀 Usage
 
 ### Task 1: 2D SFD and BMD for Central Girder
 
@@ -106,7 +106,7 @@ python task2_3d_plots.py
 - **Y-axis**: Force/moment magnitude (scaled vertically)
 - **Z-axis**: Transverse direction (0-10.35m bridge width)
 
-##  Data Structure
+## 📊 Data Structure
 
 ### Girder Configuration
 
@@ -122,7 +122,7 @@ python task2_3d_plots.py
 - `Mz_i`, `Mz_j`: Bending moment at element i-end and j-end (kN·m)
 - `Vy_i`, `Vy_j`: Shear force at element i-end and j-end (kN)
 
-##  Visualization Examples
+## 🎨 Visualization Examples
 
 ### 2D Plots (Task 1)
 - **BMD**: Blue line with red markers showing bending moments along the central girder
@@ -135,7 +135,7 @@ python task2_3d_plots.py
 - **Surface mesh**: Fins connecting base to peak for each element
 - **Edge lines**: Highlights the extruded profile
 
-##  Project Files
+## 📁 Project Files
 
 ```
 OSDAG/
@@ -152,7 +152,7 @@ OSDAG/
 └── sfd_3d.html             # Generated: 3D SFD (after running Task 2)
 ```
 
-##  Technical Implementation Details
+## 🔍 Technical Implementation Details
 
 ### Task 1: Continuous Coordinate Mapping
 
@@ -170,9 +170,9 @@ for elem_id in element_ids:
 ```
 
 This ensures:
--  No coordinate duplication
--  Perfect continuity between adjacent elements
--  Realistic distance-based X-axis
+- ✅ No coordinate duplication
+- ✅ Perfect continuity between adjacent elements
+- ✅ Realistic distance-based X-axis
 
 ### Task 2: Scaled 3D Extrusion
 
@@ -192,13 +192,13 @@ peak = [(x_start, y_i, z_start), (x_end, y_j, z_end)]
 
 Without scaling, forces in kN or kN·m (ranging from -100 to +300) would dwarf the bridge dimensions (25m × 10m), making the visualization unusable.
 
-##  Notes
+## 📝 Notes
 
 - **Sign Convention**: Values are used directly from the dataset without sign flipping
 - **Interactive Plots**: All HTML outputs are fully interactive using Plotly
 - **Browser Compatibility**: Works with all modern browsers (Chrome, Firefox, Edge, Safari)
 
-##  Academic Context
+## 🎓 Academic Context
 
 This project is part of the **Osdag FOSSEE Internship Screening Task**.
 
@@ -208,11 +208,11 @@ This project is part of the **Osdag FOSSEE Internship Screening Task**.
 - Structural engineering diagram generation
 - 3D graphics and spatial reasoning
 
-##  License
+## 📄 License
 
 This work is licensed under a **Creative Commons Attribution-ShareAlike 4.0 International License** by FOSSEE.
 
-##  Support
+## 🙋 Support
 
 For questions or issues:
 - Join the Osdag Discord Server
@@ -222,4 +222,3 @@ For questions or issues:
 
 **Created for Osdag FOSSEE Internship Screening Task**  
 *Demonstrating Xarray and Plotly expertise for structural visualization*
-

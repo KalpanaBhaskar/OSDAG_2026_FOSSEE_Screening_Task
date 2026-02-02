@@ -84,8 +84,10 @@ def extract_element_geometry(elem_id, ds, value_type='Mz'):
         value_j = float(elem_data.sel(Component='Vy_j')['forces'].values)
     
     # Apply scaling to prevent perspective distortion
-    y_i = value_i * SCALE_FACTOR
-    y_j = value_j * SCALE_FACTOR
+    # Use 0.8 for SFD (values ~3.5) to match BMD visual scale (values ~30 scaled by 0.1)
+    current_scale = SCALE_FACTOR if value_type == 'Mz' else 0.8
+    y_i = value_i * current_scale
+    y_j = value_j * current_scale
     
     return {
         'x': [x_start, x_end],
@@ -142,7 +144,12 @@ def create_3d_extrusion_plot(ds, value_type='Mz', title=''):
             
             # Add mesh surface for the fin
             # Note: hover shows ACTUAL magnitude, not scaled Y-value
-            avg_magnitude = (geom['magnitude_i'] + geom['magnitude_j']) / 2
+            # FIX: Use vertex-specific values instead of average (which sums to 0 for SFD)
+            # Vertices order: [start_base, end_base, end_peak, start_peak]
+            mag_i = geom['magnitude_i']
+            mag_j = geom['magnitude_j']
+            vertex_values = [[mag_i, elem_id], [mag_j, elem_id], [mag_j, elem_id], [mag_i, elem_id]]
+            
             fig.add_trace(go.Mesh3d(
                 x=x_coords,
                 y=y_coords,
@@ -151,7 +158,7 @@ def create_3d_extrusion_plot(ds, value_type='Mz', title=''):
                 opacity=0.7,
                 name=girder_name,
                 showlegend=(elem_id == element_ids[0]),  # Show legend only once per girder
-                customdata=[[avg_magnitude, elem_id]] * 4,  # Attach true value
+                customdata=vertex_values,  # Attach true value per vertex
                 hovertemplate=f'<b>{girder_name}</b><br>' +
                              'Element %{customdata[1]}<br>' +
                              f'{"Moment" if value_type == "Mz" else "Shear Force"}: %{{customdata[0]:.2f}} ' +
@@ -209,7 +216,7 @@ def create_3d_extrusion_plot(ds, value_type='Mz', title=''):
                 range=[0, 25]
             ),
             yaxis=dict(
-                title=f'<b>{"Moment (kN·m)" if value_type == "Mz" else "Shear Force (kN)"} × {SCALE_FACTOR}</b>',
+                title=f'<b>{"Moment (kN·m)" if value_type == "Mz" else "Shear Force (kN)"} × {SCALE_FACTOR if value_type == "Mz" else 0.8}</b>',
                 backgroundcolor="rgb(240, 240, 240)",
                 gridcolor="white",
                 showbackground=True
